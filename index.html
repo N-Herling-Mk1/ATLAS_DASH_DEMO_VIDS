@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ATLAS-Dashboard-mk_1 — demo</title>
+<meta name="description" content="Walkthrough of the ATLAS prefilter dashboard: the sign-in gate, the section deck, and the EDA sheets.">
+
+<meta property="og:title" content="ATLAS-Dashboard-mk_1 — demo">
+<meta property="og:description" content="Walkthrough of the ATLAS prefilter dashboard.">
+<meta property="og:type" content="video.other">
+<meta property="og:image" content="https://i.ytimg.com/vi/Ieu1-mhcGyk/maxresdefault.jpg">
+<!-- og:url needs an absolute address. Uncomment once the domain is pointed:
+<meta property="og:url" content="https://nth-atlas-llp.com/"> -->
+
+<style>
+  /* ---------------------------------------------------------------------
+     One file, no build, no dependencies. The only third-party request is to
+     YouTube, and only after the visitor clicks play.
+     --------------------------------------------------------------------- */
+  :root {
+    --void:  #06101B;
+    --ink:   #E8EFFA;
+    --cyan:  #3FC3FF;
+    --amber: #FF9A1F;
+    --mute:  #7F98AE;
+    --rule:  #17325C;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--void);
+    color: var(--ink);
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: clamp(20px, 4vw, 56px) clamp(16px, 4vw, 32px); }
+
+  header { margin-bottom: clamp(20px, 4vh, 40px); }
+  .kicker {
+    margin: 0 0 12px;
+    font: 600 12px/1 ui-monospace, "Cascadia Mono", Consolas, monospace;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--cyan);
+  }
+  h1 { margin: 0 0 10px; font-size: clamp(26px, 5vw, 44px); line-height: 1.1; letter-spacing: .01em; }
+  h1 .mk { color: var(--cyan); }
+  .lede { margin: 0; max-width: 62ch; color: #BFD0E6; }
+
+  .player {
+    position: relative; aspect-ratio: 16 / 9; width: 100%;
+    background: #000; border: 1px solid var(--rule); overflow: hidden;
+    box-shadow: 0 26px 70px -30px rgba(0, 0, 0, .9);
+  }
+  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  /* Click-to-load: no YouTube iframe, no Google request and no cookie until the
+     visitor presses play. A plain embed contacts Google on every page load
+     whether or not anyone watches. */
+  .facade {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    width: 100%; height: 100%; margin: 0; padding: 0; border: 0;
+    cursor: pointer; background: #000 center / cover no-repeat;
+  }
+  .facade::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(6,16,27,.10), rgba(6,16,27,.66));
+  }
+  .play {
+    position: relative; z-index: 1;
+    width: 88px; height: 88px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(63, 195, 255, .16);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 0 10px rgba(63, 195, 255, .10), 0 0 44px -6px rgba(63, 195, 255, .8);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .facade:hover .play, .facade:focus-visible .play {
+    transform: scale(1.06); background: rgba(63, 195, 255, .26);
+    box-shadow: 0 0 0 14px rgba(63, 195, 255, .14), 0 0 60px -6px rgba(63, 195, 255, 1);
+  }
+  .play svg { width: 30px; height: 30px; fill: var(--cyan); margin-left: 5px; }
+  .facade:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+  .facade-label {
+    position: absolute; z-index: 1; left: 0; right: 0; bottom: 20px; text-align: center;
+    font: 600 12px/1 ui-monospace, Consolas, monospace;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--cyan);
+  }
+
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 18px 0 0; padding: 0;
+    list-style: none; font: 13px/1.5 ui-monospace, Consolas, monospace; color: var(--mute);
+  }
+  .meta b { color: var(--cyan); font-weight: 600; }
+
+  .notes { margin-top: clamp(28px, 5vh, 52px); border-top: 1px solid var(--rule); padding-top: 26px; }
+  .notes h2 {
+    margin: 0 0 14px; font: 600 12px/1 ui-monospace, Consolas, monospace;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--mute);
+  }
+  .chapters { margin: 0; padding: 0; list-style: none; }
+  .chapters li { display: flex; gap: 16px; padding: 9px 0; border-bottom: 1px solid rgba(23,50,92,.6); }
+  .chapters li:last-child { border-bottom: 0; }
+  .chapters button {
+    flex: 0 0 auto; width: 64px; padding: 0; border: 0; background: none; cursor: pointer;
+    font: 600 13px/1.5 ui-monospace, Consolas, monospace; color: var(--amber); text-align: left;
+  }
+  .chapters button:hover, .chapters button:focus-visible { color: #fff; text-decoration: underline; }
+  .chapters span { color: #BFD0E6; }
+
+  footer { margin-top: 40px; color: var(--mute); font-size: 13px; }
+  footer a { color: var(--cyan); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">UA ATLAS &middot; Run-3 long-lived particle search</p>
+    <h1>ATLAS-Dashboard<span class="mk">-mk_1</span></h1>
+    <p class="lede">A walkthrough of the prefilter dashboard &mdash; the sign-in gate,
+      the section deck, and the EDA sheets over the displaced-vertex network inputs.</p>
+  </header>
+
+  <div class="player">
+    <button class="facade" id="facade" type="button" aria-label="Play the demo video">
+      <span class="play" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </span>
+      <span class="facade-label">Play demo</span>
+    </button>
+  </div>
+
+  <ul class="meta">
+    <li><b>Stack</b> Flask &middot; vanilla JS &middot; canvas</li>
+    <li><b>Data</b> Run-3, real only</li>
+    <li><b>Runtime</b> ~1:20</li>
+  </ul>
+
+  <section class="notes">
+    <h2>Chapters</h2>
+    <ul class="chapters">
+      <li><button data-t="0">0:00</button><span>The splash page and security demo</span></li>
+      <li><button data-t="34">0:34</button><span>Sign-in, and the navigation dashboard</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Nathan Herling &middot; <a href="https://nathanherling.com">nathanherling.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+const VIDEO_ID = "Ieu1-mhcGyk";
+
+/* youtube-nocookie.com is the privacy-enhanced host: no tracking cookie is set
+   for a viewer who is not signed in. Paired with the facade above, a visitor
+   who never presses play makes no request to Google at all. */
+const HOST = "https://www.youtube-nocookie.com";
+
+const facade = document.getElementById("facade");
+const player = facade.parentElement;
+
+function load(startSeconds) {
+  const params = new URLSearchParams({
+    autoplay: "1",
+    rel: "0",              // no unrelated channels at the end
+    modestbranding: "1",
+    playsinline: "1",      // iOS: play inline rather than seizing fullscreen
+  });
+  if (startSeconds) params.set("start", String(startSeconds));
+
+  const f = document.createElement("iframe");
+  f.src = `${HOST}/embed/${VIDEO_ID}?${params}`;
+  f.title = "ATLAS-Dashboard-mk_1 demo";
+  f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  f.allowFullscreen = true;
+  player.replaceChildren(f);
+}
+
+facade.addEventListener("click", () => load(0));
+document.querySelectorAll(".chapters button").forEach(b => {
+  b.addEventListener("click", () => load(Number(b.dataset.t) || 0));
+});
+
+/* The poster comes from YouTube, so there is no image to commit. maxresdefault
+   does not exist for every upload -- one under 1280x720 has none, and the naive
+   version of this stretches a grey 120x90 placeholder across the frame. Probe
+   it, and fall back to hqdefault, which always exists. */
+const probe = new Image();
+probe.onload = () => {
+  const src = probe.naturalWidth > 200
+    ? `https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`
+    : `https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg`;
+  facade.style.backgroundImage = `url("${src}")`;
+};
+probe.onerror = () => {
+  facade.style.backgroundImage = `url("https://i.ytimg.com/vi/${VIDEO_ID}/hqdefault.jpg")`;
+};
+probe.src = `https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`;
+</script>
+</body>
+</html>
